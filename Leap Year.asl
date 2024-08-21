@@ -36,3 +36,8 @@ gameTime
 {
 	return TimeSpan.FromSeconds(current.timer);
 }
+
+isLoading
+{
+    return true;
+}
