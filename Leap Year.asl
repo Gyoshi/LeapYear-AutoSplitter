@@ -8,22 +8,16 @@ state("Leap Year")
 
 startup
 {
-    settings.Add("Every date",  true, "Split on every date collected"); 
-    settings.SetToolTip("Every date", "Enabling this overrides other settings");
+    settings.Add("Every date",  true, "Split on every date collected");
 
-    settings.Add("Every 4th",  false, "Split on every 4th total dates collected (and also splits on 29 total)"); 
-    settings.SetToolTip("Every 4th", "Enabling this overrides specified dates");
+    settings.Add("Every 4th",  false, "Split on every 4 total dates collected (and also splits on 29 total)"); 
+    settings.SetToolTip("Every 4th", "I.e. split on 4,8,12,16,20,24,28,29 total number of dates collected, regardless of order.");
 
     settings.Add("Specify dates", true, "Specify dates");
-    settings.SetToolTip("Specify dates", "Disable the above two settings to make use of these");
     for (int i = 0; i < 29; i++)
     {
         settings.Add(""+i, false, ""+(i+1), "Specify dates");
     }
-}
-
-update
-{
 }
 
 start
@@ -43,11 +37,14 @@ split
     {
         return true;
     }
-    else if (settings["Every 4th"])
+    if (settings["Every 4th"])
     {
-        return current.dates == 0 || (29-current.dates) % 4 == 0;
+        if (current.dates == 0 || (29-current.dates) % 4 == 0)
+        {
+            return true;
+        }
     }
-    else if (settings["Specify dates"])
+    if (settings["Specify dates"])
     {
         for (int i = 0; i < 29; i++)
         {
@@ -57,10 +54,8 @@ split
             }
         }
     }
-    else
-    {
-        return false;
-    }
+    
+    return false;
 }
 
 gameTime
