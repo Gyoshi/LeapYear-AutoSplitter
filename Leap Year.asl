@@ -51,7 +51,6 @@ split
     {
         for (int i = 0; i < 29; i++)
         {
-            print("DEBUG : " + i + " -> " + current.dateArray[7 + 16*i]);
             if (settings[""+i] && current.dateArray[7 + 16*i] > old.dateArray[7 + 16*i])
             {
                 return true;
