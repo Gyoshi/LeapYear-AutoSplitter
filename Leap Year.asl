@@ -1,5 +1,6 @@
 state("Leap Year")
 {
+    float transitioning : 0xD7F450, 0xB0, 0x60, 0x2C4;
     int scene : 0xD6FF54;
     int dates : 0xD6FE98, 0xB18, 0x430, 0x0, 0x178; // counts down from 29 for each date collected
     double timer : 0xD7F450, 0xB0, 0x190, 0x50;
@@ -8,6 +9,8 @@ state("Leap Year")
 
 startup
 {
+    settings.Add("Every room",  false, "Split on every room transition");
+
     settings.Add("Every date",  true, "Split on every date collected");
 
     settings.Add("Every 4th",  false, "Split on every 4 total dates collected (and also splits on 29 total)"); 
@@ -28,6 +31,14 @@ start
 
 split
 {
+    if (settings["Every room"])
+    {
+        if (current.transitioning > 1 && old.transitioning < 1)
+        {
+            return true;
+        }
+    }
+
     if (current.dates != old.dates-1) //Don't waste time if date was not collected
     {
         return false;
